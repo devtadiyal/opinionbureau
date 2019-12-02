@@ -12,26 +12,38 @@ import kotlinx.android.synthetic.main.activity_signup_one.*
 
 
 class SignupOneActivity : AppCompatActivity() {
-
+    private lateinit var email : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup_one)
 
-        val text = "Complete your profile to earn This is an <u><font color=\"#D81B60\">xxxx</font></u> \n  points."
+        val bundle: Bundle? = intent.extras
+        if (bundle != null) {
+            val name: String = intent.getStringExtra("name")
+             email = intent.getStringExtra("email")
+
+            firstname.setText(name)
+            //lastname.setText(name)
+
+        }
+
+        val text =
+            "Complete your profile to earn This is an <u><font color=\"#D81B60\">xxxx</font></u> \n  points."
         heading.setText(Html.fromHtml(text), BufferType.SPANNABLE)
         next.setOnClickListener {
-            if(firstname.text.toString().length==0)
-            {
-                Toast.makeText(this@SignupOneActivity,"Please enter first name", Toast.LENGTH_SHORT).show()
-            }
-            else if(lastname.text.toString().length==0)
-            {
-                Toast.makeText(this@SignupOneActivity,"Please enter last name", Toast.LENGTH_SHORT).show()
+            if (firstname.text.toString().length == 0) {
+                Toast.makeText(
+                    this@SignupOneActivity,
+                    "Please enter first name",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (lastname.text.toString().length == 0) {
+                Toast.makeText(this@SignupOneActivity, "Please enter last name", Toast.LENGTH_SHORT)
+                    .show()
 
-            }
-            else
-            {
+            } else {
                 val i = Intent(this@SignupOneActivity, SignupTwoActivity::class.java)
+                i.putExtra("email",email)
                 startActivity(i)
             }
 

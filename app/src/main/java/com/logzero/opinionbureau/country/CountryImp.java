@@ -1,6 +1,6 @@
-package com.logzero.opinionbureau.culture;
+package com.logzero.opinionbureau.country;
 
-import com.logzero.opinionbureau.model.model.culture.CultureModel;
+import com.logzero.opinionbureau.model.model.country.CountryModel;
 import com.logzero.opinionbureau.mvp.BasePresenter;
 import com.logzero.opinionbureau.networking.ApiClient;
 import com.logzero.opinionbureau.networking.ApiInterface;
@@ -9,10 +9,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CultureImp extends BasePresenter<CulturePresenter.View> implements CulturePresenter {
+public class CountryImp extends BasePresenter<CountryPresenter.View> implements CountryPresenter {
 
 
-    public CultureImp(View mview) {
+    public CountryImp(View mview) {
         view = mview;
     }
 
@@ -26,9 +26,8 @@ public class CultureImp extends BasePresenter<CulturePresenter.View> implements 
         super.onViewInActive();
     }
 
-
     @Override
-    public void getCultureID(String countryid, String langid, String deviceimei, String devicetype, String ipaddress) {
+    public void getCountryCode(String content_type, String country_code) {
         try {
             view.showLoadingLayout();
             if (view == null) {
@@ -36,15 +35,15 @@ public class CultureImp extends BasePresenter<CulturePresenter.View> implements 
             }
 
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            apiInterface.getCultureID(countryid,langid,deviceimei,devicetype,ipaddress)
-                    .enqueue(new Callback<CultureModel>() {
+            apiInterface.getCountryID(country_code)
+                    .enqueue(new Callback<CountryModel>() {
 
                         @Override
-                        public void onResponse(Call<CultureModel> call, Response<CultureModel> response) {
+                        public void onResponse(Call<CountryModel> call, Response<CountryModel> response) {
                             view.hideLoadingLayout();
                             if (response.body() != null) {
-                                CultureModel loginModel = response.body();
-                                view.cultureResponse(loginModel);
+                                CountryModel loginModel = response.body();
+                                view.countryResponse(loginModel);
                             } else {
                        /* ResponseBody body = response.errorBody();
                         try {
@@ -61,7 +60,7 @@ public class CultureImp extends BasePresenter<CulturePresenter.View> implements 
                         }
 
                         @Override
-                        public void onFailure(Call<CultureModel> call, Throwable t) {
+                        public void onFailure(Call<CountryModel> call, Throwable t) {
                             if (view != null) {
                                 view.hideLoadingLayout();
                                 view.showError(t.getMessage());
@@ -71,6 +70,5 @@ public class CultureImp extends BasePresenter<CulturePresenter.View> implements 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

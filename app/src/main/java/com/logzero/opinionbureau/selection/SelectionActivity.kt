@@ -1,44 +1,63 @@
 package com.logzero.opinionbureau.selection
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.net.wifi.WifiInfo
+import android.net.wifi.WifiManager
+import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.telephony.TelephonyManager
+import android.text.format.Formatter
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.logzero.opinionbureau.R
 import com.logzero.opinionbureau.api_content.WebApiKey
+import com.logzero.opinionbureau.country.CountryImp
+import com.logzero.opinionbureau.country.CountryPresenter
 import com.logzero.opinionbureau.culture.CultureImp
 import com.logzero.opinionbureau.culture.CulturePresenter
 import com.logzero.opinionbureau.login.LoginActivity
 import com.logzero.opinionbureau.model.model.country.CountryModel
+import com.logzero.opinionbureau.model.model.culture.CultureModel
 import com.logzero.opinionbureau.signup.GDPRActivity
 import com.logzero.opinionbureau.splash.SplashActivity.Companion.REQUEST_ID_MULTIPLE_PERMISSIONS
 import com.logzero.opinionbureau.utility.BaseActivity
 import com.logzero.opinionbureau.webview.CustomTabHelper
 import com.logzero.opinionbureau.webview.WebViewActivity
 import kotlinx.android.synthetic.main.activity_selection.*
+import okhttp3.internal.format
+import java.math.BigInteger
+import java.net.InetAddress
+import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
 class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
-    CulturePresenter.View<View> {
+    CountryPresenter.View<View>, CulturePresenter.View<View> {
 
     private var customTabHelper: CustomTabHelper = CustomTabHelper()
+    lateinit var countryimp: CountryImp
     lateinit var cultureimp: CultureImp
+    lateinit var imeino: String
     val languagelist = arrayListOf<String>()
+    val countyidlist = arrayListOf<String>()
+    val langidlist = arrayListOf<String>()
 
 
     companion object {
@@ -48,21 +67,24 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     val TAG = SelectionActivity::class.java.name
 
+    @SuppressLint("MissingPermission")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_selection)
 
 
+        checkAndRequestPermissions()
+
+        val net = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifiInfo = net.connectionInfo
+
+        println("IP ADDRESSr "+wifiInfo.ipAddress.toString())
+
 
         culture!!.setOnItemSelectedListener(this)
+        countryimp = CountryImp(this)
         cultureimp = CultureImp(this)
-        val tel = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-
-        cultureimp.getCountryCode(
-            WebApiKey.KEY_CONTENTTYPEVALUE,
-            tel.networkCountryIso.toUpperCase()
-        )
-        // Create an ArrayAdapter using a simple spinner layout and languages array
 
 
         weare.setOnClickListener {
@@ -88,14 +110,11 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         }
 
         //SuitCase()
-        checkAndRequestPermissions()
-
-
 
     }
 
 
-    fun openTermsAndPrivacy(url: String) {
+    private fun openTermsAndPrivacy(url: String) {
         val builder = CustomTabsIntent.Builder()
         builder.enableUrlBarHiding()
 
@@ -160,12 +179,18 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         val permissionRecordAudio =
             ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+        val permissionReadPhoneState =
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
 
 
         val listPermissionsNeeded = ArrayList<String>()
 
         if (camerapermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.CAMERA)
+        }
+        if (permissionReadPhoneState != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE)
+
         }
         if (writepermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -181,13 +206,18 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 this,
                 listPermissionsNeeded.toTypedArray(),
                 REQUEST_ID_MULTIPLE_PERMISSIONS
+
+
             )
+
             return false
         }
+
         return true
     }
 
 
+    @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>, grantResults: IntArray
@@ -203,6 +233,7 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     PackageManager.PERMISSION_GRANTED
                 perms[Manifest.permission.ACCESS_FINE_LOCATION] = PackageManager.PERMISSION_GRANTED
                 perms[Manifest.permission.RECORD_AUDIO] = PackageManager.PERMISSION_GRANTED
+                perms[Manifest.permission.READ_PHONE_STATE] = PackageManager.PERMISSION_GRANTED
                 // Fill with actual results from user
                 if (grantResults.size > 0) {
                     for (i in permissions.indices)
@@ -211,9 +242,23 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     if (perms[Manifest.permission.CAMERA] == PackageManager.PERMISSION_GRANTED
                         && perms[Manifest.permission.WRITE_EXTERNAL_STORAGE] == PackageManager.PERMISSION_GRANTED
                         && perms[Manifest.permission.ACCESS_FINE_LOCATION] == PackageManager.PERMISSION_GRANTED
+                        && perms[Manifest.permission.READ_PHONE_STATE] == PackageManager.PERMISSION_GRANTED
                         && perms[Manifest.permission.RECORD_AUDIO] == PackageManager.PERMISSION_GRANTED
                     ) {
                         Log.d(TAG, "sms & location services permission granted")
+                        //get imei no of device
+                        val tel = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            imeino = tel.imei
+                            // ipaddress = tel.
+                            println("ime "+imeino)
+                        }
+                        //hit api of country id
+                        countryimp.getCountryCode(
+                            WebApiKey.KEY_CONTENTTYPEVALUE,
+                            tel.networkCountryIso.toUpperCase()
+                        )
                         // process the normal flow
                         /* val i = Intent(this@SelectionActivity, LoginActivity::class.java)
                          startActivity(i)
@@ -239,6 +284,10 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                             || ActivityCompat.shouldShowRequestPermissionRationale(
                                 this,
                                 Manifest.permission.RECORD_AUDIO
+                            )
+                            || ActivityCompat.shouldShowRequestPermissionRationale(
+                                this,
+                                Manifest.permission.READ_PHONE_STATE
                             )
                         ) {
                             showDialogOK("Service Permissions are required for this app",
@@ -293,6 +342,21 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long) {
         // use position to know the selected item
+        langidlist.get(position)
+        countyidlist.get(position)
+        cultureimp.getCultureID(
+            countyidlist.get(position),
+            langidlist.get(position),
+            imeino,
+            "android",
+            "12.34.56.78"
+        )
+
+        Log.d(
+            "ccccc", langidlist.get(position) + "  " +
+                    countyidlist.get(position)
+
+        )
     }
 
     override fun onNothingSelected(arg0: AdapterView<*>) {
@@ -301,7 +365,7 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     override fun showError(response: String?) {
         //TODO: implement later
-        println("ERROR " + response)
+        Toast.makeText(this, response.toString(), Toast.LENGTH_SHORT).show()
     }
 
     override fun showLoadingLayout() {
@@ -316,16 +380,15 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     override fun countryResponse(response: CountryModel?) {
         //TODO: implement later
         if (response != null) {
-            //println("RESPONSE "+response.message)
             for (element in response.data) {
-                //println(element.country_code)
-                //println(element.country_name)
-                //println(element.country_flag)
+
+                countyidlist.add(element.country_id)
 
                 for (element in element.languages) {
                     //println(element.language)
                     //println(element.lang_id)
                     languagelist.add(element.language.toString())
+                    langidlist.add(element.lang_id)
 
                 }
             }
@@ -339,6 +402,15 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         aa.setDropDownViewResource(R.layout.spinner_dropdown_item)
         // Set Adapter to Spinner
         culture!!.setAdapter(aa)
+
+    }
+
+    override fun cultureResponse(response: CultureModel?) {
+        if (response != null) {
+            println("CULTURE ID " + response.culture_id)
+
+
+        }
     }
 
 
