@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/AntiqueWhite"
+    android:layout_margin="@dimen/_5sdp"
+    >
+
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/image"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_80sdp"
+            app:lottie_autoPlay="true"
+            android:layout_centerHorizontal="true"
+            app:lottie_fileName="world.json"
+            app:lottie_loop="false"
+
+            app:lottie_repeatCount="2"
+            />
+
+
+        <com.logzero.opinionbureau.font.GothamMediumTextView
+           android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/RedError"
+            />
+
+
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_below="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+</RelativeLayout>

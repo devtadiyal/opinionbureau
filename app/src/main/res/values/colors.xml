@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#545454</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="blue">#0084DD</color>
+    <color name="button_green">#00AF4E</color>
+
+    <color name="White">#FFFFFF</color>
+    <color name="RedError">#FF0051</color>
+    <color name="Transparent">#00000000</color>
+    <color name="AntiqueWhite">#FAEBD7</color>
+    <color name="MintCream">#F5FFFA</color>
+    <color name="Gray">#808080</color>
+    <color name="ShadeBlack">#222222</color>
+    <color name="darkgrey">#2B2D2F</color>
+    <color name="greytext">#383838</color>
+
+    <color name="Black">#000000</color>
+</resources>
