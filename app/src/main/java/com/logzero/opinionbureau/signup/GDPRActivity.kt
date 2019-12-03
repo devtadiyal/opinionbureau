@@ -1,24 +1,18 @@
 package com.logzero.opinionbureau.signup
 
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.app.Application
 import android.content.Intent
-import android.graphics.Rect
+import android.graphics.Typeface
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import com.logzero.opinionbureau.R
 import com.logzero.opinionbureau.utility.BaseActivity
+import com.logzero.opinionbureau.utility.Preference
 import kotlinx.android.synthetic.main.activity_gdpr.*
-import kotlinx.android.synthetic.main.activity_signup_two.next
-import android.graphics.Typeface
-import android.view.View
-import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.BounceInterpolator
-import kotlinx.android.synthetic.main.app_bar_main.*
 
 
 class GDPRActivity : BaseActivity() {
@@ -72,6 +66,14 @@ class GDPRActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         fade(linearlay)
+        //header.setText(Preference.getInstance(this).getFromPreference(""))
+        //  gdpr.setText(Preference.getInstance(this).getFromPreference(""))
+        //  bottom.setText(Preference.getInstance(this).getFromPreference(""))
+
+        radia_id1.setText(Preference.getInstance(this).getFromPreference("iagree"))
+        radia_id2.setText(Preference.getInstance(this).getFromPreference("idontagree"))
+        buttonnext.setText(Preference.getInstance(this).getFromPreference("next"))
+
     }
 
     fun fade(view: ViewGroup) {

@@ -10,10 +10,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.logzero.opinionbureau.R
-import kotlinx.android.synthetic.main.activity_gdpr.*
+import com.logzero.opinionbureau.utility.Preference
 import kotlinx.android.synthetic.main.activity_selection.culture
 import kotlinx.android.synthetic.main.activity_signup_two.*
-import kotlinx.android.synthetic.main.activity_signup_two.next
 import me.srodrigo.androidhintspinner.HintAdapter
 import me.srodrigo.androidhintspinner.HintSpinner
 import java.text.SimpleDateFormat
@@ -25,10 +24,7 @@ import java.util.*
 class SignupTwoActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     val myCalendar = Calendar.getInstance()!!
 
-    val c = Calendar.getInstance()!!
-    val year = c.get(Calendar.YEAR)
-    val month = c.get(Calendar.MONTH)
-    val day = c.get(Calendar.DAY_OF_MONTH)
+    val c = Calendar.getInstance()
     var list_of_items = arrayOf("Gender*","Male","Female")
     private val stockAvaillist = ArrayList<String>()
     private var stock_adapter: HintAdapter<String>? = null
@@ -138,5 +134,13 @@ class SignupTwoActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
                 }
             })
         stockSpinner.init()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+      //  heading.setText(Preference.getInstance(this).getFromPreference("completeprofiletoearn"))
+        dob.setHint(Preference.getInstance(this).getFromPreference("dob"))
+        buttonnext.setText(Preference.getInstance(this).getFromPreference("next"))
     }
 }

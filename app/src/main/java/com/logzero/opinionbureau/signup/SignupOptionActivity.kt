@@ -11,6 +11,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.logzero.opinionbureau.R
+import com.logzero.opinionbureau.utility.Preference
 import kotlinx.android.synthetic.main.activity_signup_option.*
 
 
@@ -77,5 +78,13 @@ class SignupOptionActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFa
         } else {
             sequenceOf(Toast.makeText(this, result.status.toString(), Toast.LENGTH_SHORT))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        login.setText(Preference.getInstance(this).getFromPreference("continuewith"))
+        or.setText(Preference.getInstance(this).getFromPreference("or"))
+        email.setText(Preference.getInstance(this).getFromPreference("emailaddress"))
     }
 }

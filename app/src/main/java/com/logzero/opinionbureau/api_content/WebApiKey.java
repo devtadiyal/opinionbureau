@@ -11,5 +11,6 @@ public class WebApiKey {
     public static final String KEY_DEVICEIMEI = "device_IMEI";
     public static final String KEY_DEVICETYPE = "device_type";
     public static final String KEY_IPADDRESS = "ip_address";
+    public static final String KEY_CULTUREID = "culture_id";
 
 }

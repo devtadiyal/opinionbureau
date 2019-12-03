@@ -205,6 +205,7 @@
             android:layout_height="@dimen/_30sdp" />
 
         <com.logzero.opinionbureau.font.SegoeUITextView
+            android:id="@+id/termsandcond"
             android:layout_width="wrap_content"
             android:textColor="@color/colorPrimary"
             android:layout_height="wrap_content"
@@ -237,6 +238,7 @@
             android:src="@drawable/whiteuser" />
 
         <com.logzero.opinionbureau.font.GothamMediumTextView
+            android:id="@+id/signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

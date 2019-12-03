@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.net.wifi.WifiInfo
@@ -31,12 +32,16 @@ import com.logzero.opinionbureau.country.CountryImp
 import com.logzero.opinionbureau.country.CountryPresenter
 import com.logzero.opinionbureau.culture.CultureImp
 import com.logzero.opinionbureau.culture.CulturePresenter
+import com.logzero.opinionbureau.lang.LanguageImp
+import com.logzero.opinionbureau.lang.LanguagePresenter
 import com.logzero.opinionbureau.login.LoginActivity
 import com.logzero.opinionbureau.model.model.country.CountryModel
 import com.logzero.opinionbureau.model.model.culture.CultureModel
+import com.logzero.opinionbureau.model.model.language.LanguageModel
 import com.logzero.opinionbureau.signup.GDPRActivity
 import com.logzero.opinionbureau.splash.SplashActivity.Companion.REQUEST_ID_MULTIPLE_PERMISSIONS
 import com.logzero.opinionbureau.utility.BaseActivity
+import com.logzero.opinionbureau.utility.Preference
 import com.logzero.opinionbureau.webview.CustomTabHelper
 import com.logzero.opinionbureau.webview.WebViewActivity
 import kotlinx.android.synthetic.main.activity_selection.*
@@ -49,9 +54,10 @@ import kotlin.collections.HashMap
 
 
 class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
-    CountryPresenter.View<View>, CulturePresenter.View<View> {
+    CountryPresenter.View<View>, CulturePresenter.View<View>, LanguagePresenter.View<View> {
 
     private var customTabHelper: CustomTabHelper = CustomTabHelper()
+    lateinit var langimp: LanguageImp
     lateinit var countryimp: CountryImp
     lateinit var cultureimp: CultureImp
     lateinit var imeino: String
@@ -74,17 +80,18 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         setContentView(R.layout.activity_selection)
 
 
-        checkAndRequestPermissions()
-
         val net = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val wifiInfo = net.connectionInfo
 
-        println("IP ADDRESSr "+wifiInfo.ipAddress.toString())
+        println("IP ADDRESSr " + wifiInfo.ipAddress.toString())
 
 
         culture!!.setOnItemSelectedListener(this)
         countryimp = CountryImp(this)
         cultureimp = CultureImp(this)
+        langimp = LanguageImp(this)
+        checkAndRequestPermissions()
+
 
 
         weare.setOnClickListener {
@@ -110,9 +117,7 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         }
 
         //SuitCase()
-
     }
-
 
     private fun openTermsAndPrivacy(url: String) {
         val builder = CustomTabsIntent.Builder()
@@ -207,12 +212,24 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 listPermissionsNeeded.toTypedArray(),
                 REQUEST_ID_MULTIPLE_PERMISSIONS
 
-
             )
 
             return false
         }
+        //  println("DEV PERMISSION 2")
+        val tel = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            imeino = tel.imei
+            // ipaddress = tel.
+            println("ime " + imeino)
+        }
+        //hit api of country id
+        countryimp.getCountryCode(
+            WebApiKey.KEY_CONTENTTYPEVALUE,
+            //tel.networkCountryIso.toUpperCase()
+            "US"
+        )
         return true
     }
 
@@ -247,24 +264,29 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     ) {
                         Log.d(TAG, "sms & location services permission granted")
                         //get imei no of device
-                        val tel = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            imeino = tel.imei
-                            // ipaddress = tel.
-                            println("ime "+imeino)
-                        }
-                        //hit api of country id
-                        countryimp.getCountryCode(
-                            WebApiKey.KEY_CONTENTTYPEVALUE,
-                            tel.networkCountryIso.toUpperCase()
-                        )
                         // process the normal flow
                         /* val i = Intent(this@SelectionActivity, LoginActivity::class.java)
                          startActivity(i)
                          finish()*/
                         //else any one or both the permissions are not granted
+                        //println("DEV PERMISSION 6")
+                        val tel = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            imeino = tel.imei
+                            // ipaddress = tel.
+                            println("ime " + imeino)
+                        }
+                        //hit api of country id
+                        countryimp.getCountryCode(
+                            WebApiKey.KEY_CONTENTTYPEVALUE,
+                            //tel.networkCountryIso.toUpperCase()
+                            "US"
+                        )
+
                     } else {
+
                         Log.d(TAG, "Some permissions are not granted ask again ")
                         //permission is denied (this is the first time, when "never ask again" is not checked) so ask again explaining the usage of permission
                         //                        // shouldShowRequestPermissionRationale will return true
@@ -286,19 +308,22 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                                 Manifest.permission.RECORD_AUDIO
                             )
                             || ActivityCompat.shouldShowRequestPermissionRationale(
-                                this,
-                                Manifest.permission.READ_PHONE_STATE
+                                this, Manifest.permission.READ_PHONE_STATE
                             )
                         ) {
+                            println("DEV PERMISSION 3")
+
                             showDialogOK("Service Permissions are required for this app",
                                 DialogInterface.OnClickListener { dialog, which ->
                                     when (which) {
                                         DialogInterface.BUTTON_POSITIVE -> checkAndRequestPermissions()
-                                        DialogInterface.BUTTON_NEGATIVE -> funDO()
+                                        DialogInterface.BUTTON_NEGATIVE -> DoNothing()
                                         // proceed with logic by disabling the related features or quit the app.
                                     }
                                 })
                         } else {
+                            println("DEV PERMISSION 4")
+
                             explain("You need to give some mandatory permissions to continue. Do you want to go to app settings?")
                             //                            //proceed with logic by disabling the related features or quit the app.
                         }//permission is denied (and never ask again is  checked)
@@ -310,7 +335,7 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     }
 
-    fun funDO() {
+    fun DoNothing() {
 
     }
 
@@ -342,6 +367,7 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long) {
         // use position to know the selected item
+        Preference.getInstance(this).saveInPreference("position", position.toString())
         langidlist.get(position)
         countyidlist.get(position)
         cultureimp.getCultureID(
@@ -353,10 +379,10 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         )
 
         Log.d(
-            "ccccc", langidlist.get(position) + "  " +
-                    countyidlist.get(position)
-
+            "ccccc", languagelist.get(position)
         )
+        Preference.getInstance(this).saveInPreference("selectedlang", languagelist.get(position))
+
     }
 
     override fun onNothingSelected(arg0: AdapterView<*>) {
@@ -381,15 +407,11 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         //TODO: implement later
         if (response != null) {
             for (element in response.data) {
-
                 countyidlist.add(element.country_id)
 
                 for (element in element.languages) {
-                    //println(element.language)
-                    //println(element.lang_id)
                     languagelist.add(element.language.toString())
                     langidlist.add(element.lang_id)
-
                 }
             }
         }
@@ -407,10 +429,53 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     override fun cultureResponse(response: CultureModel?) {
         if (response != null) {
-            println("CULTURE ID " + response.culture_id)
+            //println("CULTURE ID " + response.culture_id)
+            langimp.getLanguage(response.culture_id.toString())
+            Preference.getInstance(this)
+                .saveInPreference("selectedcultureid", response.culture_id.toString())
 
 
         }
+    }
+
+    override fun languageResponse(response: LanguageModel?) {
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (response != null) {
+            println("MESSAGE " + response.message)
+            Preference.getInstance(this).saveInPreference("login", response.data.login)
+            Preference.getInstance(this).saveInPreference("donthaveanaccount", response.data.dont_have_an_account)
+            Preference.getInstance(this).saveInPreference("signup", response.data.sign_up)
+            Preference.getInstance(this).saveInPreference("termscondition", response.data.terms_and_condition)
+            Preference.getInstance(this).saveInPreference("privacypolicy", response.data.privacy_policy)
+            Preference.getInstance(this).saveInPreference("iagree", response.data.i_agree)
+            Preference.getInstance(this).saveInPreference("idontagree", response.data.i_dont_agree)
+            Preference.getInstance(this).saveInPreference("next", response.data.next)
+            Preference.getInstance(this).saveInPreference("continuewith", response.data.continue_with)
+            Preference.getInstance(this).saveInPreference("or", response.data.or)
+            Preference.getInstance(this).saveInPreference("emailaddress", response.data.email_add)
+            Preference.getInstance(this).saveInPreference("completeprofiletoearn", response.data.complete_profile_to_earn)
+            Preference.getInstance(this).saveInPreference("firstname", response.data.first_name)
+            Preference.getInstance(this).saveInPreference("lastname", response.data.last_name)
+            Preference.getInstance(this).saveInPreference("dob", response.data.date_of_birth)
+            Preference.getInstance(this).saveInPreference("gender", response.data.gender)
+            Preference.getInstance(this).saveInPreference("phoneno", response.data.phone_no)
+            Preference.getInstance(this).saveInPreference("password", response.data.password)
+            Preference.getInstance(this).saveInPreference("agreewithtermsandprivacy", response.data.agree_with_terms_conditon_privacy_policy)
+            Preference.getInstance(this).saveInPreference("thankyou", response.data.thank_you)
+            Preference.getInstance(this).saveInPreference("opinionimptous", response.data.opinion_is_important_to_us)
+            Preference.getInstance(this).saveInPreference("forgotpassword", response.data.forget_password)
+            Preference.getInstance(this).saveInPreference("resendotp", response.data.resend_otp)
+            //  Preference.getInstance(this).saveInPreference("weareavailable",response.data.opinion_is_important_to_us)
+
+            login.setText(Preference.getInstance(this).getFromPreference("login"))
+            dont.setText(Preference.getInstance(this).getFromPreference("donthaveanaccount"))
+            signup.setText(Preference.getInstance(this).getFromPreference("signup"))
+            terms.setText(Preference.getInstance(this).getFromPreference("termscondition") + " |")
+            privacy.setText(Preference.getInstance(this).getFromPreference("privacypolicy"))
+            // weare.setText(Preference.getInstance(this).getFromPreference("privacypolicy"))
+            // dont.setText()
+        }
+
     }
 
 

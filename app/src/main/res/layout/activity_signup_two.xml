@@ -146,6 +146,7 @@
         android:orientation="horizontal">
 
         <com.logzero.opinionbureau.font.GothamMediumTextView
+            android:id="@+id/buttonnext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

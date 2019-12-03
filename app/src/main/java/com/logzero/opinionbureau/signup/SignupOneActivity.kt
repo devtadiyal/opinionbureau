@@ -8,11 +8,13 @@ import kotlinx.android.synthetic.main.activity_signup_two.next
 import android.widget.TextView.BufferType
 import android.text.Html
 import android.widget.Toast
+import com.logzero.opinionbureau.utility.Preference
 import kotlinx.android.synthetic.main.activity_signup_one.*
+import kotlinx.android.synthetic.main.activity_signup_option.*
 
 
 class SignupOneActivity : AppCompatActivity() {
-    private lateinit var email : String
+  //  private lateinit var email : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup_one)
@@ -20,7 +22,7 @@ class SignupOneActivity : AppCompatActivity() {
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
             val name: String = intent.getStringExtra("name")
-             email = intent.getStringExtra("email")
+           //  email = intent.getStringExtra("email")
 
             firstname.setText(name)
             //lastname.setText(name)
@@ -43,12 +45,21 @@ class SignupOneActivity : AppCompatActivity() {
 
             } else {
                 val i = Intent(this@SignupOneActivity, SignupTwoActivity::class.java)
-                i.putExtra("email",email)
+                //i.putExtra("email",email)
                 startActivity(i)
             }
 
         }
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        heading.setText(Preference.getInstance(this).getFromPreference("completeprofiletoearn"))
+        firstname.setHint(Preference.getInstance(this).getFromPreference("firstname"))
+        lastname.setHint(Preference.getInstance(this).getFromPreference("lastname"))
+        nextbutton.setText(Preference.getInstance(this).getFromPreference("next"))
     }
 }

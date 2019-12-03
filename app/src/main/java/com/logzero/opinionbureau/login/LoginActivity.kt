@@ -12,9 +12,11 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.View.*
 import com.logzero.opinionbureau.forgot.ForgotPasswordActivity
+import com.logzero.opinionbureau.utility.Preference
 import com.logzero.opinionbureau.utility.ProjectUtil
 import kotlinx.android.synthetic.main.activity_login.next
 import kotlinx.android.synthetic.main.activity_login.password
+import kotlinx.android.synthetic.main.activity_selection.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -93,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
                     forgot.visibility = VISIBLE
 
 
-                    forgot.text = "Re-send OTP"
+                    forgot.text = Preference.getInstance(applicationContext).getFromPreference("resendotp")//"Re-send OTP"
 
                     // password.setHint("Enter OTP")
                     password.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -106,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
                     forgot.visibility = VISIBLE
 
 
-                    forgot.text = "Forgot Password?"
+                    forgot.text = Preference.getInstance(applicationContext).getFromPreference("forgotpassword")
                     //  password.setHint("Password")
                     password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
@@ -141,6 +143,14 @@ class LoginActivity : AppCompatActivity() {
 
             }
         }.start()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+       // inputfield.setHint(Preference.getInstance(this).getFromPreference("privacypolicy"))
+        loginbutton.setText(Preference.getInstance(this).getFromPreference("login"))
+
     }
 }
 

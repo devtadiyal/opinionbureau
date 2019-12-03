@@ -7,9 +7,8 @@ import com.logzero.opinionbureau.R
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_signup_two.*
+import com.logzero.opinionbureau.utility.Preference
 import kotlinx.android.synthetic.main.activity_signupthree.*
-import kotlinx.android.synthetic.main.activity_signupthree.next
 
 
 class SignupthreeActivity : AppCompatActivity() {
@@ -52,5 +51,14 @@ class SignupthreeActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
 
+        //  heading.setText(Preference.getInstance(this).getFromPreference("completeprofiletoearn"))
+        email.setHint(Preference.getInstance(this).getFromPreference("emailaddress"))
+        phone.setHint(Preference.getInstance(this).getFromPreference("phoneno"))
+        password.setHint(Preference.getInstance(this).getFromPreference("password"))
+        termsandcond.setText(Preference.getInstance(this).getFromPreference("agreewithtermsandprivacy"))
+        signup.setText(Preference.getInstance(this).getFromPreference("signup"))
+    }
 }
