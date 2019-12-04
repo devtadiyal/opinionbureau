@@ -4,14 +4,13 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Html
 import android.view.View
+import android.webkit.WebSettings
+import android.webkit.WebView
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.TextView
 import android.widget.Toast
 import com.logzero.opinionbureau.R
-import com.logzero.opinionbureau.font.SegoeUITextView
 import com.logzero.opinionbureau.utility.BaseActivity
 import com.logzero.opinionbureau.utility.Preference
 import kotlinx.android.synthetic.main.activity_gdpr.*
@@ -32,7 +31,11 @@ class GDPRActivity : BaseActivity() {
 
 
             } else if (getText.equals("")) {
-                Toast.makeText(this@GDPRActivity, Preference.getInstance(this).getFromPreference("val_agree_on_gdpr"), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@GDPRActivity,
+                    Preference.getInstance(this).getFromPreference("val_agree_on_gdpr"),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 finish()
             }
@@ -68,18 +71,24 @@ class GDPRActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         fade(header)
-        //header.setText(Preference.getInstance(this).getFromPreference(""))
-        //  gdpr.setText(Preference.getInstance(this).getFromPreference(""))
-        //  bottom.setText(Preference.getInstance(this).getFromPreference(""))
+        val font = Typeface.createFromAsset(assets, "fonts/SegoeUI_gdi.ttf")
+
         val text = Preference.getInstance(this).getFromPreference("gdprcontent")
-        header.setText(Html.fromHtml(text))
+
+        header.loadDataWithBaseURL(null, text, "text/html", "utf-8", null)
+        header.setBackgroundColor(0x00FFFFFF);
+        val webSettings: WebSettings = header.getSettings()
+
+        webSettings.setFixedFontFamily(font.toString())
+
+        //header.setBackgroundDrawable(myDrawable);
         radia_id1.setText(Preference.getInstance(this).getFromPreference("iagree"))
         radia_id2.setText(Preference.getInstance(this).getFromPreference("idontagree"))
         buttonnext.setText(Preference.getInstance(this).getFromPreference("next"))
 
     }
 
-    fun fade(view: SegoeUITextView) {
+    fun fade(view: WebView) {
         var fade = ObjectAnimator.ofFloat(view, View.ALPHA, 0.2f, 1.0f)
         fade.setDuration(2000)
         fade.start()
@@ -90,5 +99,6 @@ class GDPRActivity : BaseActivity() {
         var fade = ObjectAnimator.ofFloat(view, View.ALPHA, 0.2f, 1.0f)
 
         fade.end()
+
     }
 }

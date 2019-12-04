@@ -11,26 +11,19 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.View.*
+import android.widget.Toast
 import com.logzero.opinionbureau.forgot.ForgotPasswordActivity
 import com.logzero.opinionbureau.utility.Preference
 import com.logzero.opinionbureau.utility.ProjectUtil
 import kotlinx.android.synthetic.main.activity_login.next
 import kotlinx.android.synthetic.main.activity_login.password
 import kotlinx.android.synthetic.main.activity_selection.*
+import kotlinx.android.synthetic.main.activity_signup_one.*
 
 
 class LoginActivity : AppCompatActivity() {
-    // 60 seconds (1 minute)
-    val minute: Long = 1000 * 60 // 1000 milliseconds = 1 second
-
-    // 1 day 2 hours 35 minutes 50 seconds
-    val millisInFuture: Long = (minute * 1440) + (minute * 155) + (1000 * 50)
-
-    // Count down interval 1 second
-    val countDownInterval: Long = 1000
 
     private val mobileCode = "91"
-    private var isCancelled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +45,21 @@ class LoginActivity : AppCompatActivity() {
 
         }
         next.setOnClickListener {
+            if (inputfield.text.toString().isEmpty()) {
+                Toast.makeText(
+                    this@LoginActivity,
+                    Preference.getInstance(this).getFromPreference("val_phone_email"),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (password.text.toString().isEmpty()) {
+                Toast.makeText(
+                    this@LoginActivity,
+                    Preference.getInstance(this).getFromPreference("val_password"),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+
+            }
         }
 
 
