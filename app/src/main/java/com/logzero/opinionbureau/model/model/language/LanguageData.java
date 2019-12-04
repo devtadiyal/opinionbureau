@@ -23,6 +23,7 @@ public class LanguageData implements Parcelable {
     private String gender;
     private String thank_you;
 
+
     protected LanguageData(Parcel in) {
         phone_no = in.readString();
         email_add = in.readString();
@@ -51,6 +52,25 @@ public class LanguageData implements Parcelable {
         forget_password = in.readString();
         enter_otp = in.readString();
         resend_otp = in.readString();
+        oops = in.readString();
+        sorry_not_avail_in_country_now_see_list_ofactive_country = in.readString();
+        show_list = in.readString();
+        back = in.readString();
+        your_privacy_istop_priority = in.readString();
+        email = in.readString();
+        male = in.readString();
+        female = in.readString();
+        val_phone_email = in.readString();
+        val_password = in.readString();
+        val_enter_email_add = in.readString();
+        val_agree_on_gdpr = in.readString();
+        val_enter_firstname = in.readString();
+        val_enter_lastname = in.readString();
+        val_select_dob = in.readString();
+        val_select_gender = in.readString();
+        val_enter_phoneno = in.readString();
+        we_are_available_inseveral_countries = in.readString();
+        phone = in.readString();
     }
 
     @Override
@@ -82,6 +102,25 @@ public class LanguageData implements Parcelable {
         dest.writeString(forget_password);
         dest.writeString(enter_otp);
         dest.writeString(resend_otp);
+        dest.writeString(oops);
+        dest.writeString(sorry_not_avail_in_country_now_see_list_ofactive_country);
+        dest.writeString(show_list);
+        dest.writeString(back);
+        dest.writeString(your_privacy_istop_priority);
+        dest.writeString(email);
+        dest.writeString(male);
+        dest.writeString(female);
+        dest.writeString(val_phone_email);
+        dest.writeString(val_password);
+        dest.writeString(val_enter_email_add);
+        dest.writeString(val_agree_on_gdpr);
+        dest.writeString(val_enter_firstname);
+        dest.writeString(val_enter_lastname);
+        dest.writeString(val_select_dob);
+        dest.writeString(val_select_gender);
+        dest.writeString(val_enter_phoneno);
+        dest.writeString(we_are_available_inseveral_countries);
+        dest.writeString(phone);
     }
 
     @Override
@@ -330,5 +369,183 @@ public class LanguageData implements Parcelable {
     private String forget_password;
     private String enter_otp;
     private String resend_otp;
+
+    public String getOops() {
+        return oops;
+    }
+
+    public void setOops(String oops) {
+        this.oops = oops;
+    }
+
+    public String getSorry_not_avail_in_country_now_see_list_ofactive_country() {
+        return sorry_not_avail_in_country_now_see_list_ofactive_country;
+    }
+
+    public void setSorry_not_avail_in_country_now_see_list_ofactive_country(String sorry_not_avail_in_country_now_see_list_ofactive_country) {
+        this.sorry_not_avail_in_country_now_see_list_ofactive_country = sorry_not_avail_in_country_now_see_list_ofactive_country;
+    }
+
+    public String getShow_list() {
+        return show_list;
+    }
+
+    public void setShow_list(String show_list) {
+        this.show_list = show_list;
+    }
+
+    public String getBack() {
+        return back;
+    }
+
+    public void setBack(String back) {
+        this.back = back;
+    }
+
+    public String getYour_privacy_istop_priority() {
+        return your_privacy_istop_priority;
+    }
+
+    public void setYour_privacy_istop_priority(String your_privacy_istop_priority) {
+        this.your_privacy_istop_priority = your_privacy_istop_priority;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMale() {
+        return male;
+    }
+
+    public void setMale(String male) {
+        this.male = male;
+    }
+
+    public String getFemale() {
+        return female;
+    }
+
+    public void setFemale(String female) {
+        this.female = female;
+    }
+
+    public String getVal_phone_email() {
+        return val_phone_email;
+    }
+
+    public void setVal_phone_email(String val_phone_email) {
+        this.val_phone_email = val_phone_email;
+    }
+
+    public String getVal_password() {
+        return val_password;
+    }
+
+    public void setVal_password(String val_password) {
+        this.val_password = val_password;
+    }
+
+    public String getVal_enter_email_add() {
+        return val_enter_email_add;
+    }
+
+    public void setVal_enter_email_add(String val_enter_email_add) {
+        this.val_enter_email_add = val_enter_email_add;
+    }
+
+    public String getVal_agree_on_gdpr() {
+        return val_agree_on_gdpr;
+    }
+
+    public void setVal_agree_on_gdpr(String val_agree_on_gdpr) {
+        this.val_agree_on_gdpr = val_agree_on_gdpr;
+    }
+
+    public String getVal_enter_firstname() {
+        return val_enter_firstname;
+    }
+
+    public void setVal_enter_firstname(String val_enter_firstname) {
+        this.val_enter_firstname = val_enter_firstname;
+    }
+
+    public String getVal_enter_lastname() {
+        return val_enter_lastname;
+    }
+
+    public void setVal_enter_lastname(String val_enter_lastname) {
+        this.val_enter_lastname = val_enter_lastname;
+    }
+
+    public String getVal_select_dob() {
+        return val_select_dob;
+    }
+
+    public void setVal_select_dob(String val_select_dob) {
+        this.val_select_dob = val_select_dob;
+    }
+
+    public String getVal_select_gender() {
+        return val_select_gender;
+    }
+
+    public void setVal_select_gender(String val_select_gender) {
+        this.val_select_gender = val_select_gender;
+    }
+
+    public String getVal_enter_phoneno() {
+        return val_enter_phoneno;
+    }
+
+    public void setVal_enter_phoneno(String val_enter_phoneno) {
+        this.val_enter_phoneno = val_enter_phoneno;
+    }
+
+    private String oops;
+    private String sorry_not_avail_in_country_now_see_list_ofactive_country;
+    private String show_list;
+    private String back;
+    private String your_privacy_istop_priority;
+    private String email;
+    private String male;
+    private String female;
+
+    private String val_phone_email;
+    private String val_password;
+    private String val_enter_email_add;
+    private String val_agree_on_gdpr;
+    private String val_enter_firstname;
+    private String val_enter_lastname;
+    private String val_select_dob;
+    private String val_select_gender;
+    private String val_enter_phoneno;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    private String phone;
+
+    public String getWe_are_available_inseveral_countries() {
+        return we_are_available_inseveral_countries;
+    }
+
+    public void setWe_are_available_inseveral_countries(String we_are_available_inseveral_countries) {
+        this.we_are_available_inseveral_countries = we_are_available_inseveral_countries;
+    }
+
+    private String we_are_available_inseveral_countries;
+
+
+
 
 }

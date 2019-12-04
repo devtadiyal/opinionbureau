@@ -38,15 +38,17 @@ class SignupTwoActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
        // genderSpinner()
 
         val font = Typeface.createFromAsset(assets, "fonts/SegoeUI_gdi.ttf")
-       // gender.setLayerType(font)
+       //gender.setLayerType(font)
         next.setOnClickListener {
 
 
             if (dob.text.toString().length == 0) {
-                Toast.makeText(this@SignupTwoActivity, "Please select DOB", Toast.LENGTH_SHORT)
+                Toast.makeText(this@SignupTwoActivity,
+                    Preference.getInstance(this).getFromPreference("val_select_dob")
+                    , Toast.LENGTH_SHORT)
                     .show()
             } else if (gender.getSelectedItem().toString().equals("Gender*")) {
-                Toast.makeText(this@SignupTwoActivity, "Please select gender", Toast.LENGTH_SHORT)
+                Toast.makeText(this@SignupTwoActivity, Preference.getInstance(this).getFromPreference("val_select_gender"), Toast.LENGTH_SHORT)
                     .show()
 
             } else {

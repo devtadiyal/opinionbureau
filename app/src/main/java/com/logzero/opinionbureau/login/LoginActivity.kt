@@ -95,7 +95,8 @@ class LoginActivity : AppCompatActivity() {
                     forgot.visibility = VISIBLE
 
 
-                    forgot.text = Preference.getInstance(applicationContext).getFromPreference("resendotp")//"Re-send OTP"
+                    forgot.text = Preference.getInstance(applicationContext)
+                        .getFromPreference("resendotp")//"Re-send OTP"
 
                     // password.setHint("Enter OTP")
                     password.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -108,7 +109,8 @@ class LoginActivity : AppCompatActivity() {
                     forgot.visibility = VISIBLE
 
 
-                    forgot.text = Preference.getInstance(applicationContext).getFromPreference("forgotpassword")
+                    forgot.text = Preference.getInstance(applicationContext)
+                        .getFromPreference("forgotpassword")
                     //  password.setHint("Password")
                     password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
@@ -148,8 +150,13 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-       // inputfield.setHint(Preference.getInstance(this).getFromPreference("privacypolicy"))
+        inputfield.setHint(
+            Preference.getInstance(this).getFromPreference("phone") + "/" + Preference.getInstance(
+                this
+            ).getFromPreference("email")
+        )
         loginbutton.setText(Preference.getInstance(this).getFromPreference("login"))
+        password.setHint(Preference.getInstance(this).getFromPreference("password"))
 
     }
 }

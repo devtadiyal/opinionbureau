@@ -20,16 +20,16 @@ class SignupthreeActivity : AppCompatActivity() {
         next.setOnClickListener {
             if(email.text.toString().length==0)
             {
-                Toast.makeText(this@SignupthreeActivity,"Please enter email address", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SignupthreeActivity,Preference.getInstance(this).getFromPreference("val_enter_email_add"), Toast.LENGTH_SHORT).show()
             }
             else if(phone.text.toString().length==0)
             {
-                Toast.makeText(this@SignupthreeActivity,"Please enter phone number", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SignupthreeActivity,Preference.getInstance(this).getFromPreference("val_enter_phoneno"), Toast.LENGTH_SHORT).show()
 
             }
             else if(password.text.toString().length==0)
             {
-                Toast.makeText(this@SignupthreeActivity,"Please enter password", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SignupthreeActivity,Preference.getInstance(this).getFromPreference("val_password"), Toast.LENGTH_SHORT).show()
 
             }
             else if(check.isChecked==false)

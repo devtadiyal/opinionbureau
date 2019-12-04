@@ -227,8 +227,7 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         //hit api of country id
         countryimp.getCountryCode(
             WebApiKey.KEY_CONTENTTYPEVALUE,
-            //tel.networkCountryIso.toUpperCase()
-            "US"
+            tel.networkCountryIso.toUpperCase()
         )
         return true
     }
@@ -281,8 +280,8 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                         //hit api of country id
                         countryimp.getCountryCode(
                             WebApiKey.KEY_CONTENTTYPEVALUE,
-                            //tel.networkCountryIso.toUpperCase()
-                            "US"
+                            tel.networkCountryIso.toUpperCase()
+
                         )
 
                     } else {
@@ -443,36 +442,78 @@ class SelectionActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         if (response != null) {
             println("MESSAGE " + response.message)
             Preference.getInstance(this).saveInPreference("login", response.data.login)
-            Preference.getInstance(this).saveInPreference("donthaveanaccount", response.data.dont_have_an_account)
+            Preference.getInstance(this)
+                .saveInPreference("donthaveanaccount", response.data.dont_have_an_account)
             Preference.getInstance(this).saveInPreference("signup", response.data.sign_up)
-            Preference.getInstance(this).saveInPreference("termscondition", response.data.terms_and_condition)
-            Preference.getInstance(this).saveInPreference("privacypolicy", response.data.privacy_policy)
+            Preference.getInstance(this)
+                .saveInPreference("termscondition", response.data.terms_and_condition)
+            Preference.getInstance(this)
+                .saveInPreference("privacypolicy", response.data.privacy_policy)
             Preference.getInstance(this).saveInPreference("iagree", response.data.i_agree)
             Preference.getInstance(this).saveInPreference("idontagree", response.data.i_dont_agree)
             Preference.getInstance(this).saveInPreference("next", response.data.next)
-            Preference.getInstance(this).saveInPreference("continuewith", response.data.continue_with)
+            Preference.getInstance(this)
+                .saveInPreference("continuewith", response.data.continue_with)
             Preference.getInstance(this).saveInPreference("or", response.data.or)
             Preference.getInstance(this).saveInPreference("emailaddress", response.data.email_add)
-            Preference.getInstance(this).saveInPreference("completeprofiletoearn", response.data.complete_profile_to_earn)
+            Preference.getInstance(this)
+                .saveInPreference("completeprofiletoearn", response.data.complete_profile_to_earn)
             Preference.getInstance(this).saveInPreference("firstname", response.data.first_name)
             Preference.getInstance(this).saveInPreference("lastname", response.data.last_name)
             Preference.getInstance(this).saveInPreference("dob", response.data.date_of_birth)
             Preference.getInstance(this).saveInPreference("gender", response.data.gender)
             Preference.getInstance(this).saveInPreference("phoneno", response.data.phone_no)
             Preference.getInstance(this).saveInPreference("password", response.data.password)
-            Preference.getInstance(this).saveInPreference("agreewithtermsandprivacy", response.data.agree_with_terms_conditon_privacy_policy)
+            Preference.getInstance(this).saveInPreference("gdprcontent", response.data.gdpr_content)
+            Preference.getInstance(this).saveInPreference(
+                "agreewithtermsandprivacy",
+                response.data.agree_with_terms_conditon_privacy_policy
+            )
+            Preference.getInstance(this).saveInPreference("wearenot", response.data.we_are_available_inseveral_countries)
             Preference.getInstance(this).saveInPreference("thankyou", response.data.thank_you)
-            Preference.getInstance(this).saveInPreference("opinionimptous", response.data.opinion_is_important_to_us)
-            Preference.getInstance(this).saveInPreference("forgotpassword", response.data.forget_password)
+            Preference.getInstance(this)
+                .saveInPreference("opinionimptous", response.data.opinion_is_important_to_us)
+            Preference.getInstance(this)
+                .saveInPreference("forgotpassword", response.data.forget_password)
             Preference.getInstance(this).saveInPreference("resendotp", response.data.resend_otp)
-            //  Preference.getInstance(this).saveInPreference("weareavailable",response.data.opinion_is_important_to_us)
+            Preference.getInstance(this).saveInPreference("oops", response.data.oops)
+
+            Preference.getInstance(this).saveInPreference(
+                "sorrynotavailable",
+                response.data.sorry_not_avail_in_country_now_see_list_ofactive_country
+            )
+            Preference.getInstance(this).saveInPreference("showlist", response.data.show_list)
+            Preference.getInstance(this).saveInPreference("back", response.data.back)
+            Preference.getInstance(this).saveInPreference("email", response.data.email)
+            Preference.getInstance(this).saveInPreference("male", response.data.male)
+            Preference.getInstance(this).saveInPreference("female", response.data.female)
+            Preference.getInstance(this).saveInPreference("phone", response.data.phone)
+
+            Preference.getInstance(this)
+                .saveInPreference("val_phone_email", response.data.val_phone_email)
+            Preference.getInstance(this)
+                .saveInPreference("val_password", response.data.val_password)
+            Preference.getInstance(this)
+                .saveInPreference("val_enter_email_add", response.data.val_enter_email_add)
+            Preference.getInstance(this)
+                .saveInPreference("val_agree_on_gdpr", response.data.val_agree_on_gdpr)
+            Preference.getInstance(this)
+                .saveInPreference("val_enter_firstname", response.data.val_enter_firstname)
+            Preference.getInstance(this)
+                .saveInPreference("val_enter_lastname", response.data.val_enter_lastname)
+            Preference.getInstance(this)
+                .saveInPreference("val_select_dob", response.data.val_select_dob)
+            Preference.getInstance(this)
+                .saveInPreference("val_select_gender", response.data.val_select_gender)
+            Preference.getInstance(this)
+                .saveInPreference("val_enter_phoneno", response.data.val_enter_phoneno)
 
             login.setText(Preference.getInstance(this).getFromPreference("login"))
             dont.setText(Preference.getInstance(this).getFromPreference("donthaveanaccount"))
             signup.setText(Preference.getInstance(this).getFromPreference("signup"))
             terms.setText(Preference.getInstance(this).getFromPreference("termscondition") + " |")
             privacy.setText(Preference.getInstance(this).getFromPreference("privacypolicy"))
-            // weare.setText(Preference.getInstance(this).getFromPreference("privacypolicy"))
+            weare.setText(Preference.getInstance(this).getFromPreference("wearenot"))
             // dont.setText()
         }
 

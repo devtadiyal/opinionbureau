@@ -1,6 +1,7 @@
 package com.logzero.opinionbureau.signup
 
 import android.content.Intent
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.logzero.opinionbureau.R
@@ -33,14 +34,16 @@ class SignupOneActivity : AppCompatActivity() {
             "Complete your profile to earn This is an <u><font color=\"#D81B60\">xxxx</font></u> \n  points."
         heading.setText(Html.fromHtml(text), BufferType.SPANNABLE)
         next.setOnClickListener {
-            if (firstname.text.toString().length == 0) {
+            if (firstname.text.toString().isEmpty()) {
                 Toast.makeText(
                     this@SignupOneActivity,
-                    "Please enter first name",
+                    Preference.getInstance(this).getFromPreference("val_enter_firstname"),
                     Toast.LENGTH_SHORT
                 ).show()
-            } else if (lastname.text.toString().length == 0) {
-                Toast.makeText(this@SignupOneActivity, "Please enter last name", Toast.LENGTH_SHORT)
+            } else if (lastname.text.toString().isEmpty()) {
+                Toast.makeText(this@SignupOneActivity,
+                    Preference.getInstance(this).getFromPreference("val_enter_lastname")
+                    , Toast.LENGTH_SHORT)
                     .show()
 
             } else {
@@ -56,9 +59,8 @@ class SignupOneActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        heading.setText(Preference.getInstance(this).getFromPreference("completeprofiletoearn"))
         firstname.setHint(Preference.getInstance(this).getFromPreference("firstname"))
+        heading.setText(Preference.getInstance(this).getFromPreference("completeprofiletoearn"))
         lastname.setHint(Preference.getInstance(this).getFromPreference("lastname"))
         nextbutton.setText(Preference.getInstance(this).getFromPreference("next"))
     }

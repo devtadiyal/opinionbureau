@@ -85,6 +85,6 @@ class SignupOptionActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFa
 
         login.setText(Preference.getInstance(this).getFromPreference("continuewith"))
         or.setText(Preference.getInstance(this).getFromPreference("or"))
-        email.setText(Preference.getInstance(this).getFromPreference("emailaddress"))
+        email.setText(Preference.getInstance(this).getFromPreference("email"))
     }
 }
